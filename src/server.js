@@ -3,7 +3,8 @@ import cors from 'cors';
 import pino from 'pino';
 import pinoHttp from 'pino-http';
 
-export const setupServer = () => {
+const PORT = process.env.PORT || 3000; // порт, який буде використовуватися для запуску сервера (за замовчуванням 3000)
+export const startServer = () => {
   // функція для налаштування сервера
   const app = express();
 
@@ -19,6 +20,9 @@ export const setupServer = () => {
     // обробка неіснуючих роутів
     res.status(404).send({ message: 'Not found' }); // відповідь зі статусом 404
   });
-
+  app.listen(PORT, () => {
+    // запускаємо сервер на вказаному порту
+    console.log(`Server is running on port ${PORT}`); // виводимо повідомлення про запуск сервера
+  });
   return app; // повертаємо налаштування сервера
 };
