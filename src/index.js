@@ -1,9 +1,18 @@
-import { setupServer } from './server.js'; // імпортуємо функцію для налаштування сервера
 
-const PORT = process.env.PORT || 3000; // порт, який буде використовуватися для запуску сервера (за замовчуванням 3000)
-const app = setupServer(); // імпортуємо функцію для налаштування сервера
+import { startServer } from './server.js'; // Імпортуємо функцію для налаштування сервера
+import { initMongoDb } from './db/initMongoConnection.js'; // Імпортуємо функцію для встановлення зʼєднання з MongoDB
+import dotenv from 'dotenv';
 
-app.listen(PORT, () => {
-  // запускаємо сервер на вказаному порту
-  console.log(`Server is running on port ${PORT}`); // виводимо повідомлення про запуск сервера
-});
+dotenv.config();
+
+const bootstrap = async () => {
+  try {
+    await initMongoDb();
+    startServer(); // Запускаємо сервер після успішного з'єднання з MongoDB
+  } catch (error) {
+    console.error('Error during bootstrap:', error);
+  }
+};
+
+bootstrap();
+
