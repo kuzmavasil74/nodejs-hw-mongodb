@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import pino from 'pino';
 import pinoHttp from 'pino-http';
-import { env } from './env.js';
+import { env } from './utils/env.js';
 import { ENV_VARS } from './contacts/index.js';
 import { getAllContacts, getContactById } from './services/contacts.js'; // Імпортуємо сервіс
 import mongoose from 'mongoose';
