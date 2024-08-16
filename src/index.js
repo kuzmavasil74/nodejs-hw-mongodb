@@ -1,3 +1,4 @@
+
 import { startServer } from './server.js'; // Імпортуємо функцію для налаштування сервера
 import { initMongoDb } from './db/initMongoConnection.js'; // Імпортуємо функцію для встановлення зʼєднання з MongoDB
 import dotenv from 'dotenv';
@@ -14,3 +15,4 @@ const bootstrap = async () => {
 };
 
 bootstrap();
+
