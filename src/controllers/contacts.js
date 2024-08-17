@@ -6,15 +6,33 @@ import {
   updateContact,
 } from '../services/contacts.js';
 import createHttpError from 'http-errors';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
 export const getAllContactsController = async (req, res) => {
-  const contacts = await getAllContacts();
+  try {
+    const { page, perPage } = parsePaginationParams(req.query);
+    const { sortBy, sortOrder } = parseSortParams(req.query);
+    const filter = parseFilterParams(req.query);
 
-  res.status(200).json({
-    status: 200,
-    message: 'Successfully found all contacts!',
-    data: contacts,
-  });
+    const contacts = await getAllContacts({
+      page,
+      perPage,
+      sortBy,
+      sortOrder,
+      filter,
+    });
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully found all contacts!',
+      data: contacts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: 'Failed to fetch contacts',
+      error: error.message,
+    });
+  }
 };
 
 export const getContactByIdController = async (req, res, next) => {
