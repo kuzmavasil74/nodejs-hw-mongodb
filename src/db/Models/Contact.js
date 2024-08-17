@@ -28,6 +28,11 @@ const contactsSchema = new Schema(
   {
     timestamps: true,
     versionKey: false,
+    toJSON: {
+      transform: (doc, ret) => {
+        delete ret.__v;
+      },
+    },
   },
 );
 

@@ -6,15 +6,18 @@ const validateMongoId =
   (req, res, next) => {
     const id = req.params[idName];
 
+    // Перевірка на наявність ID
     if (!id) {
-      throw new Error('ID in validateMongoId is not provided');
+      return next(createHttpError(400, 'ID is not provided'));
     }
 
+    // Перевірка на валідність ID
     if (!isValidObjectId(id)) {
-      return next(createHttpError(400, 'Invalid ID'));
+      return next(createHttpError(400, 'Invalid ID format'));
     }
 
-    return next();
+    // Якщо ID є і він валідний, передаємо контроль далі
+    next();
   };
 
 export default validateMongoId;
