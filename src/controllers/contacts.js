@@ -7,13 +7,17 @@ import {
 } from '../services/contacts.js';
 import createHttpError from 'http-errors';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseFilterParams } from '../utils/parseFilterParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
 
 export const getAllContactsController = async (req, res) => {
   try {
+    // Перетворюємо параметри запиту
     const { page, perPage } = parsePaginationParams(req.query);
     const { sortBy, sortOrder } = parseSortParams(req.query);
     const filter = parseFilterParams(req.query);
 
+    // Отримуємо контакти
     const contacts = await getAllContacts({
       page,
       perPage,
@@ -21,12 +25,15 @@ export const getAllContactsController = async (req, res) => {
       sortOrder,
       filter,
     });
+
+    // Відповідаємо успішним результатом
     res.status(200).json({
       status: 200,
       message: 'Successfully found all contacts!',
       data: contacts,
     });
   } catch (error) {
+    // Відповідаємо помилкою
     res.status(500).json({
       status: 500,
       message: 'Failed to fetch contacts',
