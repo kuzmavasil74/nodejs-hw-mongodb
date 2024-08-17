@@ -11,6 +11,8 @@ export const getAllContactsController = async (req, res) => {
   const contacts = await getAllContacts();
 
   res.status(200).json({
+    status: 200,
+    message: 'Successfully found all contacts!',
     data: contacts,
   });
 };
@@ -30,6 +32,7 @@ export const getContactByIdController = async (req, res, next) => {
     data: contact,
   });
 };
+
 export const createContactController = async (req, res) => {
   const contact = await createContact(req.body);
 

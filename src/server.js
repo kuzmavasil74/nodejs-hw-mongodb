@@ -1,9 +1,8 @@
-
 import express from 'express';
 import cors from 'cors';
 import pino from 'pino-http';
 import { env } from './utils/env.js';
-import { ENV_VARS } from './contacts/index.js';
+import { ENV_VARS } from './constants/index.js';
 import contactsRouter from './routers/contacts.js';
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
 import notFoundMiddleware from './middleware/notFoundMiddleware.js';
@@ -31,4 +30,4 @@ export const startServer = () => {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
-
+};
