@@ -1,12 +1,49 @@
 import { ContactsCollection } from '../db/Models/Contact.js'; // Імпортуємо модель
+import { SORT_ORDER } from '../constants/index.js';
+import { calculatePaginationData } from '../utils/calculatePaginationData.js';
+export const getAllContacts = async ({
+  page = 1,
+  perPage = 10,
+  sortOrder = SORT_ORDER.ASC,
+  sortBy = '_id',
+  filter = {},
+}) => {
+  const limit = perPage;
+  const skip = (page - 1) * perPage;
 
-// Функція для отримання всіх контактів
-export const getAllContacts = async () => {
-  try {
-    return await ContactsCollection.find();
-  } catch (err) {
-    throw new Error('Error fetching contacts');
+  const contactsQuery = ContactsCollection.find();
+
+  if (filter.name) {
+    contactsQuery.and({ name: { $regex: filter.name, $options: 'i' } });
   }
+  if (filter.email) {
+    contactsQuery.and({ email: { $regex: filter.email, $options: 'i' } });
+  }
+  if (filter.phoneNumber) {
+    contactsQuery.and({ phoneNumber: { $regex: filter.phoneNumber, $options: 'i' } });
+  }
+  if (filter.isFavourite) {
+    contactsQuery.and({ isFavourite: filter.isFavourite });
+  }
+  if (filter.contactType) {
+    contactsQuery.and({ contactType: filter.contactType });
+  }
+
+  const [contactsCount, contacts] = await Promise.all([
+    ContactsCollection.find().merge(contactsQuery).countDocuments(),
+    contactsQuery
+      .skip(skip)
+      .limit(limit)
+      .sort({ [sortBy]: sortOrder })
+      .exec(),
+  ]);
+
+  const paginationData = calculatePaginationData(contactsCount, perPage, page);
+
+  return {
+    data: contacts,
+    ...paginationData,
+  };
 };
 
 // Функція для отримання контакту за ID
