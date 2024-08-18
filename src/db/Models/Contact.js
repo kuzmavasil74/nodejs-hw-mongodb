@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
-
+import mongoose from 'mongoose';
+const { model, Schema, models } = mongoose;
 // Визначення схеми контакту
 const contactSchema = new Schema(
   {
@@ -38,6 +38,6 @@ const contactSchema = new Schema(
 );
 
 // Експорт моделі Contact
-const ContactsCollection = model('Contact', contactSchema);
+const ContactsCollection = models.Contact || model('Contact', contactSchema);
 
 export default ContactsCollection;

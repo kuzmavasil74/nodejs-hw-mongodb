@@ -1,5 +1,5 @@
-import { model, Schema } from 'mongoose';
 import mongoose from 'mongoose';
+const { model, Schema, models } = mongoose;
 // модель сесій
 const sessionSchema = new Schema(
   {
@@ -15,6 +15,6 @@ const sessionSchema = new Schema(
   },
 );
 
-const Session = mongoose.models.Session || model('Session', sessionSchema);
+const Session = models.Session || model('Session', sessionSchema);
 
 export default Session;

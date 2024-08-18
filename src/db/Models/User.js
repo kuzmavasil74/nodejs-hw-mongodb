@@ -1,5 +1,5 @@
-import { model, Schema } from 'mongoose';
 import mongoose from 'mongoose';
+const { model, Schema, models } = mongoose;
 const userSchema = new Schema(
   {
     name: { type: String, required: true },
@@ -8,7 +8,7 @@ const userSchema = new Schema(
     role: {
       type: String,
       required: true,
-      default: ['parent'],
+      default: 'parent',
       enum: ['parent', 'teacher'],
     },
   },
@@ -24,6 +24,6 @@ userSchema.methods.toJSON = function () {
   return obj;
 };
 
-const User = mongoose.models.User || model('User', userSchema);
+const User = models.User || model('User', userSchema);
 
 export default User;
