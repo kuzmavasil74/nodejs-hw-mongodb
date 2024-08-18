@@ -9,7 +9,7 @@ import createHttpError from 'http-errors';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
-
+// Функція для отримання всіх контактів
 export const getAllContactsController = async (req, res) => {
   try {
     // Перетворюємо параметри запиту
@@ -41,7 +41,7 @@ export const getAllContactsController = async (req, res) => {
     });
   }
 };
-
+// Функція для отримання контакту за ID
 export const getContactByIdController = async (req, res, next) => {
   const { contactId } = req.params;
   const contact = await getContactById(contactId);
@@ -57,7 +57,7 @@ export const getContactByIdController = async (req, res, next) => {
     data: contact,
   });
 };
-
+// Функція для створення контакту
 export const createContactController = async (req, res) => {
   const contact = await createContact(req.body);
 
@@ -67,7 +67,7 @@ export const createContactController = async (req, res) => {
     data: contact,
   });
 };
-
+// Функція для видалення контакту
 export const deleteContactController = async (req, res, next) => {
   const { contactId } = req.params;
 
@@ -80,7 +80,7 @@ export const deleteContactController = async (req, res, next) => {
 
   res.status(204).send();
 };
-
+// Функція для оновлення контакту
 export const upsertContactController = async (req, res, next) => {
   const { contactId } = req.params;
 
@@ -90,7 +90,7 @@ export const upsertContactController = async (req, res, next) => {
     next(createHttpError(404, 'Contact not found'));
     return;
   }
-
+  // Відповідаємо успішним результатом
   const status = result.isNew ? 201 : 200;
 
   res.status(status).json({
@@ -99,7 +99,7 @@ export const upsertContactController = async (req, res, next) => {
     data: result.contact,
   });
 };
-
+// Функція для оновлення контакту
 export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const result = await updateContact(contactId, req.body);

@@ -1,5 +1,5 @@
 import Joi from 'joi';
-
+// валідація контакту за допомогою Joi (для створення)
 export const createContactSchema = Joi.object({
   name: Joi.string().min(3).max(30).required().messages({
     // John

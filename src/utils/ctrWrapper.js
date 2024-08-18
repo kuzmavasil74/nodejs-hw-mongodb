@@ -1,3 +1,4 @@
+// Функція для обробки помилок в контролері
 export const ctrlWrapper = (controller) => {
   return async (req, res, next) => {
     try {

@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-
+// валидація даних за допомогою Joi
 const validateBody = (schema) => async (req, res, next) => {
   try {
     await schema.validateAsync(req.body, { abortEarly: false });

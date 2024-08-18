@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 import { env } from '../utils/env.js';
 import { MONGO_VARS } from '../constants/index.js';
-
+// Функція для ініціалізації бази даних
 export const initMongoDb = async () => {
   try {
     const user = env(MONGO_VARS.MONGODB_USER);

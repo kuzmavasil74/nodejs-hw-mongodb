@@ -1,5 +1,5 @@
 import Joi from 'joi';
-
+// валідація контакту за допомогою Joi (для оновлення)
 export const updateContactSchema = Joi.object({
   name: Joi.string().min(3).max(30), // John
   email: Joi.string().email(), // 0l5Jc@example.com

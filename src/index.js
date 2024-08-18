@@ -3,7 +3,7 @@ import { initMongoDb } from './db/initMongoConnection.js'; // Імпортуєм
 import dotenv from 'dotenv';
 
 dotenv.config();
-
+// Функція для ініціалізації бази даних
 const bootstrap = async () => {
   try {
     await initMongoDb();

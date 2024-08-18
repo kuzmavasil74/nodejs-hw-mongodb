@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-
+// модель контактів
 const contactsSchema = new Schema(
   {
     name: {
