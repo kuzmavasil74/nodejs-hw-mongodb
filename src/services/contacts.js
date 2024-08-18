@@ -1,6 +1,7 @@
 import { ContactsCollection } from '../db/Models/Contact.js'; // Імпортуємо модель
 import { SORT_ORDER } from '../constants/index.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
+// Функція для отримання всіх контактів
 export const getAllContacts = async ({
   page = 1,
   perPage = 10,
@@ -20,7 +21,9 @@ export const getAllContacts = async ({
     contactsQuery.and({ email: { $regex: filter.email, $options: 'i' } });
   }
   if (filter.phoneNumber) {
-    contactsQuery.and({ phoneNumber: { $regex: filter.phoneNumber, $options: 'i' } });
+    contactsQuery.and({
+      phoneNumber: { $regex: filter.phoneNumber, $options: 'i' },
+    });
   }
   if (filter.isFavourite) {
     contactsQuery.and({ isFavourite: filter.isFavourite });
@@ -54,11 +57,12 @@ export const getContactById = async (contactId) => {
     throw new Error('Error fetching contact');
   }
 };
+// Функція для створення контакту
 export const createContact = async (payload) => {
   const contact = await ContactsCollection.create(payload);
   return contact;
 };
-
+// Функція для видалення контакту
 export const deleteContact = async (contactId) => {
   const contact = await ContactsCollection.findOneAndDelete({
     _id: contactId,
@@ -66,7 +70,7 @@ export const deleteContact = async (contactId) => {
 
   return contact;
 };
-
+// Функція для оновлення контакту
 export const updateContact = async (contactId, payload, options = {}) => {
   const rawResult = await ContactsCollection.findOneAndUpdate(
     { _id: contactId },
