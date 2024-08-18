@@ -11,7 +11,7 @@ import { ctrlWrapper } from '../utils/ctrWrapper.js';
 import { validateMongoId, validateBody } from '../middleware/index.js';
 import { createContactSchema } from '../validation/createContactSchema.js';
 import { updateContactSchema } from '../validation/updateContactSchema.js';
-import { authenticate } from '../middleware/authenticate.js';
+import { authenticate } from '../middleware/authentication.js';
 import { checkChildPermission } from '../middleware/checkChildPermission.js';
 
 const contactsRouter = Router();
