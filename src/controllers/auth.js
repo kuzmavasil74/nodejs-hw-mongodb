@@ -15,7 +15,7 @@ const setupSessionCookies = (res, session) => {
     expire: 7 * 24 * 60 * 60,
   });
 };
-// створення користувача
+// створення користувача при реєстрації
 export const registerUserController = async (req, res) => {
   const user = await createUser(req.body);
 
