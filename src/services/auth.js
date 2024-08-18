@@ -1,8 +1,8 @@
 import createHttpError from 'http-errors';
-import { User } from '../db/models/user.js';
+import User from '../db/models/user.js';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
-import { Session } from '../db/models/session.js';
+import Session from '../db/models/session.js';
 
 const createSession = () => {
   return {

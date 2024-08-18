@@ -1,5 +1,5 @@
 import { SORT_ORDER } from '../constants/index.js';
-import { ContactsCollection } from '../db/models/contact.js';
+import ContactsCollection from '../db/Models/Contact.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
 export const getAllContacts = async ({
@@ -34,7 +34,7 @@ export const getAllContacts = async ({
   contactsQuery.where('parentId').equals(userId);
 
   const [contactsCount, contacts] = await Promise.all([
-    qsCollection.find().merge(contactsQuery).countDocuments(),
+    ContactsCollection.find().merge(contactsQuery).countDocuments(),
     contactsQuery
       .skip(skip)
       .limit(limit)
