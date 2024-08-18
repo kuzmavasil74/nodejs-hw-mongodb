@@ -3,7 +3,7 @@ import { User } from '../db/models/user.js';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import { Session } from '../db/models/session.js';
-// створення сесій
+
 const createSession = () => {
   return {
     accessToken: crypto.randomBytes(20).toString('base64'),
@@ -12,7 +12,7 @@ const createSession = () => {
     refreshTokenValidUntil: Date.now() + 1000 * 60 * 60 * 24 * 7, // 7 days
   };
 };
-// створення користувача при реєстрації
+
 export const createUser = async (payload) => {
   const hashedPassword = await bcrypt.hash(payload.password, 10);
 
@@ -30,7 +30,7 @@ export const createUser = async (payload) => {
     password: hashedPassword,
   });
 };
-// авторизація
+
 export const loginUser = async ({ email, password }) => {
   const user = await User.findOne({ email });
 
@@ -51,14 +51,14 @@ export const loginUser = async ({ email, password }) => {
     ...createSession(),
   });
 };
-// вихід
+
 export const logoutUser = async ({ sessionId, sessionToken }) => {
   return await Session.deleteOne({
     _id: sessionId,
     refreshToken: sessionToken,
   });
 };
-// перезавантаження
+
 export const refreshSession = async ({ sessionId, sessionToken }) => {
   const session = await Session.findOne({
     _id: sessionId,

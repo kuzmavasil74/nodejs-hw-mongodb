@@ -4,7 +4,7 @@ import {
   logoutUser,
   refreshSession,
 } from '../services/auth.js';
-// створення сесій
+// створення сесій кукків
 const setupSessionCookies = (res, session) => {
   res.cookie('sessionId', session._id, {
     httpOnly: true,

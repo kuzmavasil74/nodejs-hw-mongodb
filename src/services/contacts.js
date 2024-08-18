@@ -1,39 +1,40 @@
-import { ContactsCollection } from '../db/Models/Contact.js'; // Імпортуємо модель
 import { SORT_ORDER } from '../constants/index.js';
+import { ContactsCollection } from '../db/models/contact.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
-// Функція для отримання всіх контактів
+
 export const getAllContacts = async ({
   page = 1,
   perPage = 10,
   sortOrder = SORT_ORDER.ASC,
   sortBy = '_id',
   filter = {},
+  userId,
 }) => {
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
   const contactsQuery = ContactsCollection.find();
 
-  if (filter.name) {
-    contactsQuery.and({ name: { $regex: filter.name, $options: 'i' } });
+  if (filter.gender) {
+    contactsQuery.where('gender').equals(filter.gender);
   }
-  if (filter.email) {
-    contactsQuery.and({ email: { $regex: filter.email, $options: 'i' } });
+  if (filter.maxAge) {
+    contactsQuery.where('age').lte(filter.maxAge);
   }
-  if (filter.phoneNumber) {
-    contactsQuery.and({
-      phoneNumber: { $regex: filter.phoneNumber, $options: 'i' },
-    });
+  if (filter.minAge) {
+    contactsQuery.where('age').gte(filter.minAge);
   }
-  if (filter.isFavourite) {
-    contactsQuery.and({ isFavourite: filter.isFavourite });
+  if (filter.maxAvgMark) {
+    contactsQuery.where('avgMark').lte(filter.maxAvgMark);
   }
-  if (filter.contactType) {
-    contactsQuery.and({ contactType: filter.contactType });
+  if (filter.minAvgMark) {
+    contactsQuery.where('avgMark').gte(filter.minAvgMark);
   }
 
+  contactsQuery.where('parentId').equals(userId);
+
   const [contactsCount, contacts] = await Promise.all([
-    ContactsCollection.find().merge(contactsQuery).countDocuments(),
+    qsCollection.find().merge(contactsQuery).countDocuments(),
     contactsQuery
       .skip(skip)
       .limit(limit)
@@ -49,20 +50,19 @@ export const getAllContacts = async ({
   };
 };
 
-// Функція для отримання контакту за ID
 export const getContactById = async (contactId) => {
-  try {
-    return await ContactsCollection.findById(contactId);
-  } catch (err) {
-    throw new Error('Error fetching contact');
-  }
-};
-// Функція для створення контакту
-export const createContact = async (payload) => {
-  const contact = await ContactsCollection.create(payload);
+  const contact = await ContactsCollection.findById(contactId);
   return contact;
 };
-// Функція для видалення контакту
+
+export const createContact = async (payload, userId) => {
+  const contact = await ContactsCollection.create({
+    ...payload,
+    parentId: userId,
+  });
+  return contact;
+};
+
 export const deleteContact = async (contactId) => {
   const contact = await ContactsCollection.findOneAndDelete({
     _id: contactId,
@@ -70,7 +70,7 @@ export const deleteContact = async (contactId) => {
 
   return contact;
 };
-// Функція для оновлення контакту
+
 export const updateContact = async (contactId, payload, options = {}) => {
   const rawResult = await ContactsCollection.findOneAndUpdate(
     { _id: contactId },
@@ -86,6 +86,6 @@ export const updateContact = async (contactId, payload, options = {}) => {
 
   return {
     contact: rawResult.value,
-    isNew: Boolean(rawResult.lastErrorObject?.upserted),
+    isNew: Boolean(rawResult?.lastErrorObject?.upserted),
   };
 };

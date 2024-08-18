@@ -1,6 +1,6 @@
 import { isHttpError } from 'http-errors';
 import { MongooseError } from 'mongoose';
-// мідлвара відповіді за допомогою json з помилками
+
 const errorHandlerMiddleware = (err, req, res, next) => {
   if (isHttpError(err)) {
     res.status(err.status).json({

@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-// модель користувача
+
 const userSchema = new Schema(
   {
     name: { type: String, required: true },
@@ -17,7 +17,7 @@ const userSchema = new Schema(
     versionKey: false,
   },
 );
-// метод для відображення пароля
+
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;

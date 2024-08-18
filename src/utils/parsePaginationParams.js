@@ -1,4 +1,3 @@
-// Функція для обробки параметрів пагінації запиту по сторінці та кількості елементів на сторінці за допомогою parseInt
 const parseNumber = (number, defaultValue) => {
   const isString = typeof number === 'string';
   if (!isString) return defaultValue;
@@ -10,7 +9,7 @@ const parseNumber = (number, defaultValue) => {
 
   return parsedNumber;
 };
-// Функція для обробки параметрів пагінації запиту по сторінці та кількості елементів на сторінці за допомогою parseInt
+
 export const parsePaginationParams = (query) => {
   const { page, perPage } = query;
 

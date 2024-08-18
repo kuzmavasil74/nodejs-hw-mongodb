@@ -1,19 +1,24 @@
 import express from 'express';
-import cors from 'cors';
 import pino from 'pino-http';
+import cors from 'cors';
 import { env } from './utils/env.js';
+import {
+  notFoundMiddleware,
+  errorHandlerMiddleware,
+} from './middleware/index.js';
 import { ENV_VARS } from './constants/index.js';
-import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
-import notFoundMiddleware from './middleware/notFoundMiddleware.js';
 import rootRouter from './routers/index.js';
-// запуск сервера
-const PORT = env(ENV_VARS.PORT, 3000);
-console.log('PORT', PORT);
-// функція для запуску сервера
+import cookieParser from 'cookie-parser';
+
+const PORT = Number(env(ENV_VARS.PORT, '3000'));
+
 export const startServer = () => {
   const app = express();
+
   app.use(express.json());
   app.use(cors());
+  app.use(cookieParser());
+
   app.use(
     pino({
       transport: {
@@ -21,14 +26,20 @@ export const startServer = () => {
       },
     }),
   );
-  // маршрутизація
+
+  app.get('/', (req, res) => {
+    res.json({
+      message: 'Hello world!',
+    });
+  });
+
   app.use(rootRouter);
-  // мідлвари відповіді за допомогою json з помилками
+
   app.use(notFoundMiddleware);
-  // мідлвари відповіді за допомогою json з помилками
+
   app.use(errorHandlerMiddleware);
-  // запуск сервера
+
   app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on ${PORT}`);
   });
 };
