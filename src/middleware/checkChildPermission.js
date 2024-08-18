@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-import { ContactsCollection } from '../db/models/contact.js';
+import ContactsCollection from '../db/Models/Contact.js';
 export const checkChildPermission =
   (...roles) =>
   async (req, res, next) => {

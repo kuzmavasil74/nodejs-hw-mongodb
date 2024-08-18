@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 
-const contactsSchema = new Schema(
+// Визначення схеми контакту
+const contactSchema = new Schema(
   {
     name: {
       type: String,
@@ -36,4 +37,7 @@ const contactsSchema = new Schema(
   },
 );
 
-export const ContactsCollection = model('contacts', contactsSchema);
+// Експорт моделі Contact
+const ContactsCollection = model('Contact', contactSchema);
+
+export default ContactsCollection;
