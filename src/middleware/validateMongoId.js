@@ -1,23 +1,20 @@
 import createHttpError from 'http-errors';
 import { isValidObjectId } from 'mongoose';
-
+// Валідація ID
 const validateMongoId =
   (idName = 'id') =>
   (req, res, next) => {
     const id = req.params[idName];
 
-    // Перевірка на наявність ID
     if (!id) {
-      return next(createHttpError(400, 'ID is not provided'));
+      throw new Error('ID in validateMongoId is not provided');
     }
 
-    // Перевірка на валідність ID
     if (!isValidObjectId(id)) {
-      return next(createHttpError(400, 'Invalid ID format'));
+      return next(createHttpError(400, 'Invalid ID'));
     }
 
-    // Якщо ID є і він валідний, передаємо контроль далі
-    next();
+    return next();
   };
 
 export default validateMongoId;

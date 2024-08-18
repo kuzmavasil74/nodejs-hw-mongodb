@@ -1,42 +1,48 @@
 import { Router } from 'express';
 import {
-  getAllContactsController,
-  getContactByIdController,
   createContactController,
   deleteContactController,
-  upsertContactController,
+  getAllContactsController,
+  getContactByIdController,
   patchContactController,
+  upsertContactController,
 } from '../controllers/contacts.js';
 import { ctrlWrapper } from '../utils/ctrWrapper.js';
 import { validateMongoId, validateBody } from '../middleware/index.js';
 import { createContactSchema } from '../validation/createContactSchema.js';
 import { updateContactSchema } from '../validation/updateContactSchema.js';
+import { authenticate } from '../middleware/authentication.js';
+import { checkChildPermission } from '../middleware/checkChildPermission.js';
 
-const router = Router();
-router.use('/contacts/:contactId', validateMongoId('contactId'));
+const contactsRouter = Router();
 
-router.get('/contacts', ctrlWrapper(getAllContactsController));
+contactsRouter.use('/:contactId', validateMongoId('contactId'));
 
-router.get('/contacts/:contactId', ctrlWrapper(getContactByIdController));
+contactsRouter.use('/', authenticate);
 
-router.post(
-  '/contacts',
+contactsRouter.get('/', ctrlWrapper(getAllContactsController));
+
+contactsRouter.get('/:contactId', ctrlWrapper(getContactByIdController));
+
+contactsRouter.post(
+  '/',
   validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );
 
-router.delete('/contacts/:contactId', ctrlWrapper(deleteContactController));
+contactsRouter.delete('/:contactId', ctrlWrapper(deleteContactController));
 
-router.put(
-  '/contacts/:contactId',
+contactsRouter.put(
+  '/:contactId',
   validateBody(createContactSchema),
   ctrlWrapper(upsertContactController),
 );
 
-router.patch(
-  '/contacts/:contactId',
+contactsRouter.patch(
+  '/:contactId',
+  checkChildPermission('teacher', 'parent'),
   validateBody(updateContactSchema),
   ctrlWrapper(patchContactController),
 );
 
-export default router;
+export default contactsRouter;

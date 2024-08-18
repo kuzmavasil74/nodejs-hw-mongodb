@@ -1,48 +1,37 @@
-const parseName = (name) => {
-  if (!name) {
-    return undefined;
-  }
-  return { name: { $regex: name, $options: 'i' } };
+const parseGender = (gender) => {
+  const isString = typeof gender === 'string';
+  if (!isString) return;
+  const isGender = (gender) => ['male', 'female', 'other'].includes(gender);
+
+  if (isGender(gender)) return gender;
 };
-const parseEmail = (email) => {
-  if (!email) {
-    return undefined;
+
+const parseNumber = (number) => {
+  const isString = typeof number === 'string';
+  if (!isString) return;
+
+  const parsedNumber = parseInt(number);
+  if (Number.isNaN(parsedNumber)) {
+    return;
   }
-  return { email: { $regex: email, $options: 'i' } };
-};
-const parsePhoneNumber = (phoneNumber) => {
-  if (!phoneNumber) {
-    return undefined;
-  }
-  return { phoneNumber: { $regex: phoneNumber, $options: 'i' } };
-};
-const parseFavourite = (favourite) => {
-  if (!favourite) {
-    return undefined;
-  }
-  return { isFavourite: favourite };
-};
-const parseContactType = (contactType) => {
-  if (!contactType) {
-    return undefined;
-  }
-  return { contactType };
+
+  return parsedNumber;
 };
 
 export const parseFilterParams = (query) => {
-  const { name, email, phoneNumber, isFavourite, contactType } = query;
+  const { gender, maxAge, minAge, maxAvgMark, minAvgMark } = query;
 
-  const parsedName = parseName(name);
-  const parsedEmail = parseEmail(email);
-  const parsedPhoneNumber = parsePhoneNumber(phoneNumber);
-  const parsedFavourite = parseFavourite(isFavourite);
-  const parsedContactType = parseContactType(contactType);
+  const parsedGender = parseGender(gender);
+  const parsedMaxAge = parseNumber(maxAge);
+  const parsedMinAge = parseNumber(minAge);
+  const parsedMaxAvgMark = parseNumber(maxAvgMark);
+  const parsedMinAvgMark = parseNumber(minAvgMark);
 
   return {
-    name: parsedName,
-    email: parsedEmail,
-    phoneNumber: parsedPhoneNumber,
-    isFavourite: parsedFavourite,
-    contactType: parsedContactType,
+    gender: parsedGender,
+    maxAge: parsedMaxAge,
+    minAge: parsedMinAge,
+    maxAvgMark: parsedMaxAvgMark,
+    minAvgMark: parsedMinAvgMark,
   };
 };

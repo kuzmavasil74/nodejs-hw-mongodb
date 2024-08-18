@@ -1,16 +1,9 @@
-import { startServer } from './server.js'; // Імпортуємо функцію для налаштування сервера
-import { initMongoDb } from './db/initMongoConnection.js'; // Імпортуємо функцію для встановлення зʼєднання з MongoDB
-import dotenv from 'dotenv';
-
-dotenv.config();
+import { initMongoDB } from './db/initMongoConnection.js';
+import { startServer } from './server.js';
 
 const bootstrap = async () => {
-  try {
-    await initMongoDb();
-    startServer(); // Запускаємо сервер після успішного з'єднання з MongoDB
-  } catch (error) {
-    console.error('Error during bootstrap:', error);
-  }
+  await initMongoDB();
+  startServer();
 };
 
 bootstrap();

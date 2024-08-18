@@ -1,18 +1,24 @@
 import express from 'express';
-import cors from 'cors';
 import pino from 'pino-http';
+import cors from 'cors';
 import { env } from './utils/env.js';
+import {
+  notFoundMiddleware,
+  errorHandlerMiddleware,
+} from './middleware/index.js';
 import { ENV_VARS } from './constants/index.js';
-import contactsRouter from './routers/contacts.js';
-import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
-import notFoundMiddleware from './middleware/notFoundMiddleware.js';
+import rootRouter from './routers/index.js';
+import cookieParser from 'cookie-parser';
 
-const PORT = env(ENV_VARS.PORT, 3000);
-console.log('PORT', PORT);
+const PORT = Number(env(ENV_VARS.PORT, '3000'));
+
 export const startServer = () => {
   const app = express();
+
   app.use(express.json());
   app.use(cors());
+  app.use(cookieParser());
+
   app.use(
     pino({
       transport: {
@@ -21,13 +27,19 @@ export const startServer = () => {
     }),
   );
 
-  app.use(contactsRouter);
+  app.get('/', (req, res) => {
+    res.json({
+      message: 'Hello world!',
+    });
+  });
+
+  app.use(rootRouter);
 
   app.use(notFoundMiddleware);
 
   app.use(errorHandlerMiddleware);
 
   app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on ${PORT}`);
   });
 };
