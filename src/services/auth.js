@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-import User from '../db/Models/user.js';
+import { UserCollection } from '../db/Models/user.js';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import Session from '../db/Models/session.js';
@@ -16,7 +16,7 @@ const createSession = () => {
 export const createUser = async (payload) => {
   const hashedPassword = await bcrypt.hash(payload.password, 10);
 
-  const user = await User.findOne({ email: payload.email });
+  const user = await UserCollection.findOne({ email: payload.email });
 
   if (user) {
     throw createHttpError(
@@ -25,14 +25,14 @@ export const createUser = async (payload) => {
     );
   }
 
-  return await User.create({
+  return await UserCollection.create({
     ...payload,
     password: hashedPassword,
   });
 };
 
 export const loginUser = async ({ email, password }) => {
-  const user = await User.findOne({ email });
+  const user = await UserCollection.findOne({ email });
 
   if (!user) {
     throw createHttpError(404, 'User not found!');
@@ -73,7 +73,7 @@ export const refreshSession = async ({ sessionId, sessionToken }) => {
     throw createHttpError(401, 'Refresh token is expired!');
   }
 
-  const user = await User.findById(session.userId);
+  const user = await UserCollection.findById(session.userId);
 
   if (!user) {
     throw createHttpError(401, 'Session not found');
