@@ -14,7 +14,8 @@ const errorHandlerMiddleware = (err, req, res, next) => {
   if (err instanceof MongooseError) {
     res.status(500).json({
       status: err.status,
-      message: 'Mongoose error',
+      message: err.message,
+      // message: 'Mongoose error',
     });
     return;
   }
