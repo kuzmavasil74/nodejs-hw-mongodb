@@ -8,6 +8,10 @@ import jwt from 'jsonwebtoken';
 import { env } from '../utils/env.js';
 import { EMAIL_VARS } from '../constants/index.js';
 import { ENV_VARS } from '../constants/index.js';
+import path from 'path';
+import fs from 'fs/promises';
+import { TEMPLATES_DIR } from '../constants/index.js';
+import handlebars from 'handlebars';
 
 const createSession = () => {
   return {
@@ -108,60 +112,32 @@ export const requestResetToken = async (email) => {
       expiresIn: '15m',
     },
   );
+  const resetPasswordTemplatePath = path.join(
+    TEMPLATES_DIR,
+    'send-reset-password-email.html',
+  );
 
+  const templateSource = (
+    await fs.readFile(resetPasswordTemplatePath)
+  ).toString();
+
+  const template = handlebars.compile(templateSource);
+
+  const html = template({
+    name: user.name,
+    link: `${env(ENV_VARS.FRONTEND_HOST)}/reset-password?token=${resetToken}`,
+  });
   try {
     await sendEmail({
       from: env(EMAIL_VARS.SMTP_FROM),
       to: email,
       subject: 'Reset your password',
-      html: `<a href="${env(
-        'FRONTEND_HOST',
-      )}/reset-password?token=${resetToken}">Click here to reset your password</a>`,
+      html,
     });
   } catch (error) {
     console.log('Failed to send email', error);
     throw createHttpError(500, 'Failed to send email');
   }
-
-  // const resetToken = jwt.sign(
-  //   {
-  //     sub: user._id,
-  //     email,
-  //   },
-  //   env(ENV_VARS.JWT_SECRET),
-  //   {
-  //     expiresIn: '15m',
-  //   },
-  // );
-
-  // const resetPasswordTemplatePath = path.join(
-  //   TEMPLATES_DIR,
-  //   'send-reset-password-email.html',
-  // );
-
-  // const templateSource = (
-  //   await fs.readFile(resetPasswordTemplatePath)
-  // ).toString();
-
-  // const template = handlebars.compile(templateSource);
-
-  // const html = template({
-  //   name: user.name,
-  //   link: `${env(ENV_VARS.FRONTEND_HOST)}/reset-password?token=${resetToken}`,
-  // });
-
-  // try {
-  //   await sendEmail({
-  //     from: env(EMAIL_VARS.SMTP_FROM),
-  //     to: email,
-  //     subject: 'Reset your password',
-  //     html,
-  //   });
-  // } catch (error) {
-  //   console.log(error);
-
-  //   throw createHttpError(500, 'Problem with sending email');
-  // }
 };
 export const resetPassword = async (payload) => {
   let entries;

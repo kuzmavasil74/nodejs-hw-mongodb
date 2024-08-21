@@ -1,3 +1,5 @@
+import path from 'path';
+
 // константи
 // порт сервера
 export const ENV_VARS = {
@@ -25,3 +27,5 @@ export const EMAIL_VARS = {
   SMTP_PASS: 'SMTP_PASS',
   SMTP_FROM: 'SMTP_FROM',
 };
+
+export const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
