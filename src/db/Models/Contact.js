@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 const { model, Schema, models } = mongoose;
-// Визначення схеми контакту
+
 const contactSchema = new Schema(
   {
     name: {
@@ -25,19 +25,18 @@ const contactSchema = new Schema(
       required: true,
       default: 'personal',
     },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
   {
     timestamps: true,
     versionKey: false,
-    toJSON: {
-      transform: (doc, ret) => {
-        delete ret.__v;
-      },
-    },
   },
 );
 
-// Експорт моделі Contact
 const ContactsCollection = models.Contact || model('Contact', contactSchema);
 
 export default ContactsCollection;
