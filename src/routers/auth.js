@@ -26,12 +26,12 @@ authRouter.post('/logout', ctrlWrapper(logoutUserController));
 authRouter.post('/refresh-token', ctrlWrapper(refreshTokenController));
 
 authRouter.post(
-  '/request-reset-email',
+  '/reset-password',
   validateBody(requestResetEmailSchema),
   ctrlWrapper(requestResetEmailController),
 );
 authRouter.post(
-  '/reset-password',
+  '/reset-pwd',
   validateBody(resetPasswordSchema),
   ctrlWrapper(resetPasswordController),
 );
