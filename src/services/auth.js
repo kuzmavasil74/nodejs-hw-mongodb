@@ -86,3 +86,50 @@ export const refreshSession = async ({ sessionId, sessionToken }) => {
     ...createSession(),
   });
 };
+export const requestResetToken = async (email) => {
+  const user = await UserCollection.findOne({ email });
+
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  // const resetToken = jwt.sign(
+  //   {
+  //     sub: user._id,
+  //     email,
+  //   },
+  //   env(ENV_VARS.JWT_SECRET),
+  //   {
+  //     expiresIn: '15m',
+  //   },
+  // );
+
+  // const resetPasswordTemplatePath = path.join(
+  //   TEMPLATES_DIR,
+  //   'send-reset-password-email.html',
+  // );
+
+  // const templateSource = (
+  //   await fs.readFile(resetPasswordTemplatePath)
+  // ).toString();
+
+  // const template = handlebars.compile(templateSource);
+
+  // const html = template({
+  //   name: user.name,
+  //   link: `${env(ENV_VARS.FRONTEND_HOST)}/reset-password?token=${resetToken}`,
+  // });
+
+  // try {
+  //   await sendEmail({
+  //     from: env(EMAIL_VARS.SMTP_FROM),
+  //     to: email,
+  //     subject: 'Reset your password',
+  //     html,
+  //   });
+  // } catch (error) {
+  //   console.log(error);
+
+  //   throw createHttpError(500, 'Problem with sending email');
+  // }
+};
