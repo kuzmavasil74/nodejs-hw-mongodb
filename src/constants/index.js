@@ -2,6 +2,8 @@
 // порт сервера
 export const ENV_VARS = {
   PORT: 'PORT',
+  JWT_SECRET: 'JWT_SECRET',
+  FRONTEND_HOST: 'FRONTEND_HOST',
 };
 // порт бази даних
 export const MONGO_VARS = {
@@ -21,4 +23,5 @@ export const EMAIL_VARS = {
   SMTP_PORT: 'SMTP_PORT',
   SMTP_USER: 'SMTP_USER',
   SMTP_PASS: 'SMTP_PASS',
+  SMTP_FROM: 'SMTP_FROM',
 };

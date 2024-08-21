@@ -3,6 +3,11 @@ import { UserCollection } from '../db/Models/User.js';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import Session from '../db/Models/session.js';
+import { sendEmail } from '../utils/sendEmail.js';
+import jwt from 'jsonwebtoken';
+import { env } from '../utils/env.js';
+import { EMAIL_VARS } from '../constants/index.js';
+import { ENV_VARS } from '../constants/index.js';
 
 const createSession = () => {
   return {
@@ -93,6 +98,31 @@ export const requestResetToken = async (email) => {
     throw createHttpError(404, 'User not found');
   }
 
+  const resetToken = jwt.sign(
+    {
+      sub: user._id,
+      email,
+    },
+    env('JWT_SECRET'),
+    {
+      expiresIn: '15m',
+    },
+  );
+
+  try {
+    await sendEmail({
+      from: env(EMAIL_VARS.SMTP_FROM),
+      to: email,
+      subject: 'Reset your password',
+      html: `<a href="${env(
+        'FRONTEND_HOST',
+      )}/reset-password?token=${resetToken}">Click here to reset your password</a>`,
+    });
+  } catch (error) {
+    console.log('Failed to send email', error);
+    throw createHttpError(500, 'Failed to send email');
+  }
+
   // const resetToken = jwt.sign(
   //   {
   //     sub: user._id,
@@ -132,4 +162,30 @@ export const requestResetToken = async (email) => {
 
   //   throw createHttpError(500, 'Problem with sending email');
   // }
+};
+export const resetPassword = async (payload) => {
+  let entries;
+
+  try {
+    entries = jwt.verify(payload.token, env(ENV_VARS.JWT_SECRET));
+  } catch (error) {
+    if (error instanceof Error) throw createHttpError(401, error.message);
+    throw error;
+  }
+
+  const user = await UserCollection.findOne({
+    email: entries.email,
+    _id: entries.sub,
+  });
+
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  const encryptedPassword = await bcrypt.hash(payload.password, 10);
+
+  await UserCollection.updateOne(
+    { _id: user._id },
+    { password: encryptedPassword },
+  );
 };
