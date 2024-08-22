@@ -42,7 +42,7 @@ contactsRouter.put(
 
 contactsRouter.patch(
   '/:contactId',
-  checkChildPermission('teacher', 'parent'),
+  // checkChildPermission('teacher', 'parent'),
   validateBody(updateContactSchema),
   ctrlWrapper(patchContactController),
 );
