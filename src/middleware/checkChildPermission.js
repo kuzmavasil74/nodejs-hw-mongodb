@@ -13,7 +13,7 @@ export const checkChildPermission =
     if (roles.includes('parent') && user.role === 'parent') {
       const contact = await ContactsCollection.findOne({
         _id: contactId,
-        parentId: user._id,
+        userId: user._id,
       });
 
       if (!contact) {

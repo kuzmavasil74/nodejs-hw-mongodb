@@ -13,6 +13,7 @@ import cookieParser from 'cookie-parser';
 const PORT = Number(env(ENV_VARS.PORT, '3000'));
 
 export const startServer = () => {
+  console.log('Starting server...');
   const app = express();
 
   app.use(express.json());
@@ -26,12 +27,6 @@ export const startServer = () => {
       },
     }),
   );
-
-  app.get('/', (req, res) => {
-    res.json({
-      message: 'Hello world!',
-    });
-  });
 
   app.use(rootRouter);
 
