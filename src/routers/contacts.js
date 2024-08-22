@@ -13,6 +13,7 @@ import { createContactSchema } from '../validation/createContactSchema.js';
 import { updateContactSchema } from '../validation/updateContactSchema.js';
 import { authenticate } from '../middleware/authentication.js';
 import { checkChildPermission } from '../middleware/checkChildPermission.js';
+import { upload } from '../middleware/upload.js';
 
 const contactsRouter = Router();
 
@@ -26,7 +27,8 @@ contactsRouter.get('/:contactId', ctrlWrapper(getContactByIdController));
 
 contactsRouter.post(
   '/',
-  validateBody(createContactSchema),
+  upload.single('avatar'),
+  // validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );
 

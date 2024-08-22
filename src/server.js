@@ -6,7 +6,7 @@ import {
   notFoundMiddleware,
   errorHandlerMiddleware,
 } from './middleware/index.js';
-import { ENV_VARS } from './constants/index.js';
+import { ENV_VARS, UPLOAD_DIR } from './constants/index.js';
 import rootRouter from './routers/index.js';
 import cookieParser from 'cookie-parser';
 

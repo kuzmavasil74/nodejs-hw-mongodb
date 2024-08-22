@@ -3,7 +3,10 @@ import {
   loginUser,
   logoutUser,
   refreshSession,
+  resetPassword,
 } from '../services/auth.js';
+
+import { requestResetToken } from '../services/auth.js';
 // створення сесій кукків
 const setupSessionCookies = (res, session) => {
   res.cookie('sessionId', session._id, {
@@ -59,5 +62,24 @@ export const refreshTokenController = async (req, res) => {
     status: 200,
     message: 'Token refreshed successfuly!',
     data: { accessToken: session.accessToken },
+  });
+};
+
+export const requestResetEmailController = async (req, res) => {
+  await requestResetToken(req.body.email);
+
+  res.json({
+    message: 'Reset password email was successfuly sent!',
+    status: 200,
+    data: {},
+  });
+};
+export const resetPasswordController = async (req, res) => {
+  await resetPassword(req.body);
+
+  res.json({
+    message: 'Password was successfully reset!',
+    status: 200,
+    data: {},
   });
 };

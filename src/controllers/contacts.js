@@ -55,7 +55,8 @@ export const getContactByIdController = async (req, res, next) => {
 };
 // Функція для створення контакту
 export const createContactController = async (req, res) => {
-  const contact = await createContact(req.body, req.user._id);
+  const { body, file } = req;
+  const contact = await createContact({ ...body, avatar: file }, req.user._id);
 
   res.status(201).json({
     status: 201,
