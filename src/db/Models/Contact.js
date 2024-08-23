@@ -7,23 +7,21 @@ const contactSchema = new Schema(
       type: String,
       required: true,
     },
-    phoneNumber: {
-      type: String,
-      required: true,
-    },
     email: {
       type: String,
       required: false,
     },
-    isFavourite: {
-      type: Boolean,
-      default: false,
-    },
-    contactType: {
+    phoneNumber: {
       type: String,
-      enum: ['work', 'home', 'personal'],
       required: true,
-      default: 'personal',
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now,
     },
     userId: {
       type: Schema.Types.ObjectId,
