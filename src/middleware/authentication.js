@@ -11,7 +11,7 @@ export const authenticate = async (req, res, next) => {
   const [bearer, token] = header.split(' ');
 
   if (bearer !== 'Bearer' || !token) {
-    return next(createHttpError(401, 'Auth header should be of bearer type'));
+    return next(createHttpError(401, 'Access token expired'));
   }
 
   const session = await Session.findOne({ accessToken: token });
