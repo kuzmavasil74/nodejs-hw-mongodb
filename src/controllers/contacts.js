@@ -8,7 +8,6 @@ import {
 import createHttpError from 'http-errors';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
-import { parseFilterParams } from '../utils/parseFilterParams.js';
 
 // Функція для отримання всіх контактів
 export const getAllContactsController = async (req, res, next) => {
@@ -16,15 +15,12 @@ export const getAllContactsController = async (req, res, next) => {
 
   const { sortBy, sortOrder } = parseSortParams(req.query);
 
-  const filter = parseFilterParams(req.query);
-
   try {
     const contacts = await getAllContacts({
       page,
       perPage,
       sortBy,
       sortOrder,
-      filter,
       userId: req.user._id,
     });
 
