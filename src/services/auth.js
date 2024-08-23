@@ -28,10 +28,7 @@ export const createUser = async (payload) => {
   const user = await UserCollection.findOne({ email: payload.email });
 
   if (user) {
-    throw createHttpError(
-      409,
-      'User with this email already exist in database',
-    );
+    throw createHttpError(409, 'Email in use');
   }
 
   return await UserCollection.create({
@@ -114,7 +111,7 @@ export const requestResetToken = async (email) => {
   );
   const resetPasswordTemplatePath = path.join(
     TEMPLATES_DIR,
-    'send-reset-password-email.html',
+    'send-reset-email.html',
   );
 
   const templateSource = (
@@ -136,7 +133,10 @@ export const requestResetToken = async (email) => {
     });
   } catch (error) {
     console.log('Failed to send email', error);
-    throw createHttpError(500, 'Failed to send email');
+    throw createHttpError(
+      500,
+      'Failed to send the email, please try again later.',
+    );
   }
 };
 export const resetPassword = async (payload) => {
@@ -145,7 +145,8 @@ export const resetPassword = async (payload) => {
   try {
     entries = jwt.verify(payload.token, env(ENV_VARS.JWT_SECRET));
   } catch (error) {
-    if (error instanceof Error) throw createHttpError(401, error.message);
+    if (error instanceof Error)
+      throw createHttpError(401, 'Token is expired or invalid.');
     throw error;
   }
 

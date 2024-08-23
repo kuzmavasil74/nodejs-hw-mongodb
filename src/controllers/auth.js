@@ -23,7 +23,7 @@ export const registerUserController = async (req, res) => {
   const user = await createUser(req.body);
 
   res.status(201).json({
-    message: 'User is created!',
+    message: 'Successfully registered a user!',
     data: { user },
   });
 };
@@ -35,7 +35,7 @@ export const loginUserController = async (req, res) => {
 
   res.json({
     status: 200,
-    message: 'User is logged in!',
+    message: 'Successfully logged in an user!',
     data: { accessToken: session.accessToken },
   });
 };
@@ -50,6 +50,12 @@ export const logoutUserController = async (req, res) => {
   res.clearCookie('sessionToken');
 
   res.status(204).send();
+
+  res.json({
+    status: 204,
+    message: 'Successfully logged out an user!',
+    data: {},
+  });
 };
 // перезавантаження
 export const refreshTokenController = async (req, res) => {
@@ -60,7 +66,7 @@ export const refreshTokenController = async (req, res) => {
 
   res.json({
     status: 200,
-    message: 'Token refreshed successfuly!',
+    message: 'Successfully refreshed a session!',
     data: { accessToken: session.accessToken },
   });
 };
@@ -69,7 +75,7 @@ export const requestResetEmailController = async (req, res) => {
   await requestResetToken(req.body.email);
 
   res.json({
-    message: 'Reset password email was successfuly sent!',
+    message: 'Reset password email has been successfully sent.',
     status: 200,
     data: {},
   });
@@ -78,7 +84,7 @@ export const resetPasswordController = async (req, res) => {
   await resetPassword(req.body);
 
   res.json({
-    message: 'Password was successfully reset!',
+    message: 'Password has been successfully reset.',
     status: 200,
     data: {},
   });
