@@ -28,6 +28,7 @@ export const startServer = () => {
     }),
   );
 
+  app.use('/uploads', express.static(UPLOAD_DIR));
   app.use(rootRouter);
 
   app.use(notFoundMiddleware);
