@@ -37,15 +37,15 @@ export const getContactById = async (contactId, userId) => {
   return contact;
 };
 
-export const createContact = async ({ avatar, ...payload }, userId) => {
+export const createContact = async ({ userId, payload }) => {
   // const url = await saveFileToLocalachine(avatar);
   // const url = await saveFileToCloudinary(avatar);
-  const url = await saveFile(avatar);
+  // const url = await saveFile(avatar);
 
   const contact = await ContactsCollection.create({
     ...payload,
     userId,
-    avatarUrl: url,
+    // avatarUrl: url,
   });
   return contact;
 };

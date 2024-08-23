@@ -3,34 +3,19 @@ const { model, Schema, models } = mongoose;
 
 const contactSchema = new Schema(
   {
-    name: {
+    name: { type: String, required: true },
+    email: { type: String, required: false },
+    phoneNumber: { type: String, required: true },
+    isFavourite: { type: Boolean, default: false },
+    userId: { type: Schema.Types.ObjectId, required: true },
+    contactType: {
       type: String,
       required: true,
+      default: 'personal',
+      enum: ['work', 'home', 'personal'],
     },
-    email: {
-      type: String,
-      required: false,
-    },
-    phoneNumber: {
-      type: String,
-      required: true,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now,
-    },
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    avatarUrl: {
-      type: String,
-    },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
   },
   {
     timestamps: true,
