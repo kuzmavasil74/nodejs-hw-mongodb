@@ -27,8 +27,8 @@ contactsRouter.get('/:contactId', ctrlWrapper(getContactByIdController));
 
 contactsRouter.post(
   '/',
-  upload.single('avatar'),
-  // validateBody(createContactSchema),
+  upload.single('photo'),
+  validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );
 
@@ -36,12 +36,14 @@ contactsRouter.delete('/:contactId', ctrlWrapper(deleteContactController));
 
 contactsRouter.put(
   '/:contactId',
+  upload.single('photo'),
   validateBody(createContactSchema),
   ctrlWrapper(upsertContactController),
 );
 
 contactsRouter.patch(
   '/:contactId',
+  upload.single('photo'),
   // checkChildPermission('teacher', 'parent'),
   validateBody(updateContactSchema),
   ctrlWrapper(patchContactController),
