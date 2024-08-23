@@ -21,9 +21,9 @@ authRouter.post(
 );
 authRouter.post('/login', ctrlWrapper(loginUserController));
 
-authRouter.post('/logout', ctrlWrapper(logoutUserController));
+authRouter.post('/refresh', ctrlWrapper(refreshTokenController));
 
-authRouter.post('/refresh-token', ctrlWrapper(refreshTokenController));
+authRouter.post('/logout', ctrlWrapper(logoutUserController));
 
 authRouter.post(
   '/reset-password',

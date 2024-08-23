@@ -28,10 +28,7 @@ export const createUser = async (payload) => {
   const user = await UserCollection.findOne({ email: payload.email });
 
   if (user) {
-    throw createHttpError(
-      409,
-      'User with this email already exist in database',
-    );
+    throw createHttpError(409, 'Email in use');
   }
 
   return await UserCollection.create({
