@@ -3,34 +3,13 @@ const { model, Schema, models } = mongoose;
 
 const contactSchema = new Schema(
   {
-    name: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: false,
-    },
-    phoneNumber: {
-      type: String,
-      required: true,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now,
-    },
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    photoUrl: {
-      type: String,
-    },
+    name: { type: String, required: true },
+    email: { type: String, required: false },
+    phoneNumber: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
+    userId: { type: Schema.Types.ObjectId },
+    photo: { type: String },
   },
   {
     timestamps: true,

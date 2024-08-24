@@ -14,9 +14,11 @@ export const getAllContacts = async ({
   const limit = perPage;
   const skip = (page - 1) * perPage;
   const query = { userId };
+  const contactsQuery = ContactsCollection.find({ userId });
 
   const [contactsCount, contacts] = await Promise.all([
-    ContactsCollection.countDocuments(query)
+    ContactsCollection.countDocuments({ userId }),
+    contactsQuery
       .skip(skip)
       .limit(limit)
       .sort({ [sortBy]: sortOrder })
@@ -44,7 +46,7 @@ export const createContact = async ({ photo, ...payload }, userId) => {
   const contact = await ContactsCollection.create({
     ...payload,
     userId,
-    photoUrl: url,
+    photo: url,
   });
   return contact;
 };
