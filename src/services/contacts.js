@@ -3,7 +3,7 @@ import ContactsCollection from '../db/Models/Contact.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 import { saveFile } from '../utils/saveFile.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
-import { ObjectId } from 'mongodb';
+
 export const getAllContacts = async ({
   page = 1,
   perPage = 10,

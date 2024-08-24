@@ -14,7 +14,7 @@ tags:
     description: Authorization operations
 servers:
   - url: http://localhost:3000
-  - url: https://nodejs-hw-mongodb-6hw.onrender.com
+  - url: https://nodejs-hw-mongodb-7-d3g7.onrender.com
 paths:
   /contacts/{contactId}:
     get:
