@@ -52,14 +52,26 @@ export const getContactByIdController = async (req, res, next) => {
 // Функція для створення контакту
 export const createContactController = async (req, res) => {
   const { body, file } = req;
-  const contact = await createContact({ ...body, photo: file }, req.user._id);
 
-  res.status(201).json({
-    status: 201,
-    message: `Successfully created a contact!`,
-    data: contact,
-  });
+  if (!file) {
+    return res.status(400).json({ message: 'File is required' });
+  }
+
+  try {
+    const contact = await createContact({ ...body, photo: file }, req.user._id);
+    res.status(201).json({
+      status: 201,
+      message: 'Successfully created a contact!',
+      data: contact,
+    });
+  } catch (error) {
+    console.error('Error creating contact:', error);
+    res
+      .status(500)
+      .json({ message: 'Failed to create contact', error: error.message });
+  }
 };
+
 // Функція для видалення контакту
 export const deleteContactController = async (req, res, next) => {
   const { contactId } = req.params;
@@ -112,16 +124,25 @@ export const upsertContactController = async (req, res, next) => {
 // Функція для оновлення контакту
 export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await updateContact(contactId, req.body, req.user._id);
+  const userId = req.user._id;
 
-  if (!result) {
-    next(createHttpError(404, 'Contact not found'));
-    return;
+  console.log('Request to update contact with ID:', contactId);
+  console.log('For user ID:', userId);
+
+  try {
+    const result = await updateContact(contactId, req.body, userId);
+
+    if (!result) {
+      return next(createHttpError(404, 'Contact not found'));
+    }
+
+    res.json({
+      status: 200,
+      message: 'Successfully patched a contact!',
+      data: result,
+    });
+  } catch (error) {
+    console.error('Error in patchContactController:', error);
+    next(createHttpError(500, 'Failed to patch contact'));
   }
-
-  res.json({
-    status: 200,
-    message: `Successfully patched a contact!`,
-    data: result.contact,
-  });
 };
