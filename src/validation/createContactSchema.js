@@ -10,7 +10,7 @@ export const createContactSchema = Joi.object({
   }),
   email: Joi.string().email().required(), // 0l5Jc@example.com
   phoneNumber: Joi.string() // +380000000000 or 380000000000
-    .pattern(/^[0-9]{12}$/)
+    .pattern(/^[+]?[0-9]{12}$/)
     .required()
     .messages({
       'string.pattern.base': 'Phone number must be in the format +XXXXXXXXXXXX',
