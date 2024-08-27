@@ -2,6 +2,8 @@ import { SORT_ORDER } from '../constants/index.js';
 import ContactsCollection from '../db/Models/Contact.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 import { saveFile } from '../utils/saveFile.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { ObjectId } from 'mongodb';
 export const getAllContacts = async ({
   page = 1,
   perPage = 10,
@@ -12,9 +14,11 @@ export const getAllContacts = async ({
   const limit = perPage;
   const skip = (page - 1) * perPage;
   const query = { userId };
+  const contactsQuery = ContactsCollection.find({ userId });
 
   const [contactsCount, contacts] = await Promise.all([
-    ContactsCollection.countDocuments(query)
+    ContactsCollection.countDocuments({ userId }),
+    contactsQuery
       .skip(skip)
       .limit(limit)
       .sort({ [sortBy]: sortOrder })
@@ -30,19 +34,21 @@ export const getAllContacts = async ({
 };
 
 export const getContactById = async (contactId, userId) => {
-  const contact = await ContactsCollection.findOne({ _id: contactId, userId });
+  const contact = await ContactsCollection.findOne({
+    _id: new ObjectId(contactId),
+  });
   return contact;
 };
 
-export const createContact = async ({ avatar, ...payload }, userId) => {
-  // const url = await saveFileToLocalachine(avatar);
-  // const url = await saveFileToCloudinary(avatar);
-  const url = await saveFile(avatar);
+export const createContact = async ({ photo, ...payload }, userId) => {
+  // const url = await saveFileToLocalachine(photo);
+  const url = await saveFileToCloudinary(photo);
+  // const url = await saveFile(photo);
 
   const contact = await ContactsCollection.create({
     ...payload,
     userId,
-    avatarUrl: url,
+    photo: url,
   });
   return contact;
 };
@@ -70,6 +76,5 @@ export const updateContact = async (
       ...options,
     },
   );
-
   return contact;
 };
