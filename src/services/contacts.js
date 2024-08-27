@@ -4,6 +4,7 @@ import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 import { saveFile } from '../utils/saveFile.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { ObjectId } from 'mongodb';
+
 export const getAllContacts = async ({
   page = 1,
   perPage = 10,
@@ -11,6 +12,7 @@ export const getAllContacts = async ({
   sortBy = '_id',
   userId,
 }) => {
+  console.log(userId);
   const limit = perPage;
   const skip = (page - 1) * perPage;
   const query = { userId };

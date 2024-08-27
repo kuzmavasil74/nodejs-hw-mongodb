@@ -12,6 +12,10 @@ import path from 'path';
 import fs from 'fs/promises';
 import { TEMPLATES_DIR } from '../constants/index.js';
 import handlebars from 'handlebars';
+import {
+  getFullNameFromGoogleTokenPlayload,
+  validateCode,
+} from '../utils/googleOAuth.js';
 
 const createSession = () => {
   return {
@@ -165,4 +169,30 @@ export const resetPassword = async (payload) => {
     { _id: user._id },
     { password: encryptedPassword },
   );
+};
+
+export const loginOrSignupWithGoogle = async (code) => {
+  const loginTicket = await validateCode(code);
+  const payload = loginTicket.getPayload();
+
+  if (!payload) throw createHttpError(401, 'Unauthorized');
+
+  let user = await UserCollection.findOne({ email: payload.email });
+
+  if (!user) {
+    const password = await bcrypt.hash(crypto.randomBytes(10), 10);
+
+    user = await UserCollection.create({
+      email: payload.email,
+      name: getFullNameFromGoogleTokenPlayload(payload),
+      password,
+      role: 'parent',
+    });
+  }
+  await Session.deleteOne({ userId: user._id });
+
+  return await Session.create({
+    userId: user._id,
+    ...createSession(),
+  });
 };

@@ -53,6 +53,7 @@ export const getContactByIdController = async (req, res, next) => {
 export const createContactController = async (req, res) => {
   const { body, file } = req;
 
+  const contact = await createContact({ ...body, photo: file }, req.user._id);
   if (!file) {
     return res.status(400).json({ message: 'File is required' });
   }
@@ -124,6 +125,7 @@ export const upsertContactController = async (req, res, next) => {
 // Функція для оновлення контакту
 export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
+  const result = await updateContact(contactId, req.body, req.user._id);
   const userId = req.user._id;
 
   console.log('Request to update contact with ID:', contactId);
