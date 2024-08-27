@@ -5,6 +5,7 @@ import { EMAIL_VARS } from '../constants/index.js';
 const transport = nodemailer.createTransport({
   host: env(EMAIL_VARS.SMTP_HOST),
   port: env(EMAIL_VARS.SMTP_PORT),
+  secure: false,
   auth: {
     user: env(EMAIL_VARS.SMTP_USER),
     pass: env(EMAIL_VARS.SMTP_PASS),

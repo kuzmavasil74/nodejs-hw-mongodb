@@ -3,6 +3,7 @@ import ContactsCollection from '../db/Models/Contact.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 import { saveFile } from '../utils/saveFile.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { ObjectId } from 'mongodb';
 
 export const getAllContacts = async ({
   page = 1,
@@ -35,7 +36,9 @@ export const getAllContacts = async ({
 };
 
 export const getContactById = async (contactId, userId) => {
-  const contact = await ContactsCollection.findOne({ _id: contactId, userId });
+  const contact = await ContactsCollection.findOne({
+    _id: new ObjectId(contactId),
+  });
   return contact;
 };
 
@@ -75,6 +78,5 @@ export const updateContact = async (
       ...options,
     },
   );
-
   return contact;
 };
